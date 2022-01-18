@@ -1,22 +1,111 @@
-import { Button, Col, Divider, Row, Typography } from "antd";
-import * as React from "react";
-const { Text, Title, Paragraph } = Typography;
-import { SharedLayout } from "@app/components";
+// const { Text, Title, Paragraph } = Typography;
+import { SharedLayout } from "@app/components/src";
 import { useSharedQuery } from "@app/graphql";
+import { Button, Dropdown, Form, Input, Menu } from "antd";
 import { NextPage } from "next";
+import * as React from "react";
 
 // Convenience helper
-const Li = ({ children, ...props }: any) => (
-  <li {...props}>
-    <Typography>{children}</Typography>
-  </li>
-);
+// const Li = ({ children, ...props }: any) => (
+//   <li {...props}>
+//     <Typography>{children}</Typography>
+//   </li>
+// );
 
+const menu = (
+  <Menu>
+    <Menu.Item>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://www.antgroup.com"
+      >
+        1st menu item
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://www.aliyun.com"
+      >
+        2nd menu item
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://www.luohanacademy.com"
+      >
+        3rd menu item
+      </a>
+    </Menu.Item>
+  </Menu>
+);
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
+
+// return (
+
+//   <SharedLayout title="" query={query}>
+
+// );
 const Home: NextPage = () => {
   const query = useSharedQuery();
+  const TaskList = query;
+
+  const [form] = Form.useForm();
+
+  const onFinish = (values: any) => {
+    console.log(values);
+  };
+
+  const onReset = () => {
+    form.resetFields();
+  };
+
+  const onFill = () => {
+    form.setFieldsValue({
+      note: "Hello world!",
+      gender: "male",
+    });
+  };
   return (
     <SharedLayout title="" query={query}>
-      <Row justify="space-between" gutter={32}>
+      <Button type="primary" block href="https://graphile.org/sponsor">
+        Create Task
+      </Button>
+      {TaskList}
+      <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+        <Form.Item name="note" label="Note" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="note" label="Note" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Dropdown overlay={menu} placement="bottomCenter" arrow>
+          <Button>bottomCenter</Button>
+        </Dropdown>
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+          <Button htmlType="button" onClick={onReset}>
+            Reset
+          </Button>
+          <Button type="link" htmlType="button" onClick={onFill}>
+            Fill form
+          </Button>
+        </Form.Item>
+      </Form>
+
+      {/* <Row justify="space-between" gutter={32}>
         <Col xs={24} sm={16}>
           <Title data-cy="homepage-header">
             Welcome to the PostGraphile starter
@@ -296,7 +385,7 @@ const Home: NextPage = () => {
           </Paragraph>
           <Paragraph>Thank you! 🙏</Paragraph>
         </Col>
-      </Row>
+      </Row> */}
     </SharedLayout>
   );
 };
